@@ -138,12 +138,26 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
     top_pins = power_pins + clock_pins + video_sync_pins
     bottom_pins = ground_pins + system_pins + mem_ctrl_pins + video_pins
     
-    # Calculate symbol box size
+    # Helper function to calculate size with group gaps
+    def calculate_size_with_gaps(pins_list, gap_between_groups=2.54):
+        if not pins_list:
+            return 0
+        group_changes = 0
+        prev_group = None
+        for pin in pins_list:
+            if prev_group is not None and pin.group != prev_group:
+                group_changes += 1
+            prev_group = pin.group
+        return len(pins_list) * pin_spacing + group_changes * gap_between_groups
+    
+    # Calculate symbol box size with gaps between groups
     pin_spacing = 2.54  # 2.54mm spacing between pins
-    left_height = len(left_pins) * pin_spacing
-    right_height = len(right_pins) * pin_spacing
-    top_width = len(top_pins) * pin_spacing if top_pins else 10.16
-    bottom_width = len(bottom_pins) * pin_spacing if bottom_pins else 10.16
+    group_gap = 2.54    # 2.54mm gap between different groups
+    
+    left_height = calculate_size_with_gaps(left_pins, group_gap)
+    right_height = calculate_size_with_gaps(right_pins, group_gap)
+    top_width = calculate_size_with_gaps(top_pins, group_gap) if top_pins else 10.16
+    bottom_width = calculate_size_with_gaps(bottom_pins, group_gap) if bottom_pins else 10.16
     
     # Symbol dimensions
     height = max(left_height, right_height) + 10.16  # Add padding
@@ -186,45 +200,87 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
     # Add pins
     symbol += f'    (symbol "{component_name}_1_1"\n'
     
+    # Helper function to place pins with group gaps
+    def place_pins_with_gaps(pins_list, x_pos, angle, gap_between_groups=2.54):
+        """Place pins with gaps between different groups"""
+        if not pins_list:
+            return
+        
+        # Calculate total height including gaps
+        group_changes = 0
+        prev_group = None
+        for pin in pins_list:
+            if prev_group is not None and pin.group != prev_group:
+                group_changes += 1
+            prev_group = pin.group
+        
+        total_height = (len(pins_list) - 1) * pin_spacing + group_changes * gap_between_groups
+        start_y = total_height / 2
+        
+        current_y = start_y
+        prev_group = None
+        for pin in pins_list:
+            # Add gap if group changed
+            if prev_group is not None and pin.group != prev_group:
+                current_y -= gap_between_groups
+            
+            symbol_line = f'      (pin {pin.to_kicad_type()} line (at {x_pos:.2f} {current_y:.2f} {angle}) (length 5.08)\n'
+            symbol_line += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
+            symbol_line += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
+            symbol_line += f'      )\n'
+            
+            nonlocal symbol
+            symbol += symbol_line
+            
+            current_y -= pin_spacing
+            prev_group = pin.group
+    
     # Left side pins (address bus first, then control)
-    if left_pins:
-        start_y = (len(left_pins) - 1) * pin_spacing / 2
-        for i, pin in enumerate(left_pins):
-            y = start_y - (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at {-width/2 - 5.08:.2f} {y:.2f} 0) (length 5.08)\n'
-            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'      )\n'
+    place_pins_with_gaps(left_pins, -width/2 - 5.08, 0)
     
     # Right side pins (data bus first, then control)
-    if right_pins:
-        start_y = (len(right_pins) - 1) * pin_spacing / 2
-        for i, pin in enumerate(right_pins):
-            y = start_y - (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at {width/2 + 5.08:.2f} {y:.2f} 180) (length 5.08)\n'
-            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'      )\n'
+    place_pins_with_gaps(right_pins, width/2 + 5.08, 180)
+    
+    # Helper function for horizontal pins (top/bottom) with group gaps
+    def place_horizontal_pins_with_gaps(pins_list, y_pos, angle, gap_between_groups=2.54):
+        """Place horizontal pins with gaps between different groups"""
+        if not pins_list:
+            return
+        
+        # Calculate total width including gaps
+        group_changes = 0
+        prev_group = None
+        for pin in pins_list:
+            if prev_group is not None and pin.group != prev_group:
+                group_changes += 1
+            prev_group = pin.group
+        
+        total_width = (len(pins_list) - 1) * pin_spacing + group_changes * gap_between_groups
+        start_x = -total_width / 2
+        
+        current_x = start_x
+        prev_group = None
+        for pin in pins_list:
+            # Add gap if group changed
+            if prev_group is not None and pin.group != prev_group:
+                current_x += gap_between_groups
+            
+            symbol_line = f'      (pin {pin.to_kicad_type()} line (at {current_x:.2f} {y_pos:.2f} {angle}) (length 5.08)\n'
+            symbol_line += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
+            symbol_line += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
+            symbol_line += f'      )\n'
+            
+            nonlocal symbol
+            symbol += symbol_line
+            
+            current_x += pin_spacing
+            prev_group = pin.group
     
     # Top pins (power supplies)
-    if top_pins:
-        start_x = -(len(top_pins) - 1) * pin_spacing / 2
-        for i, pin in enumerate(top_pins):
-            x = start_x + (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {height/2 + 5.08:.2f} 270) (length 5.08)\n'
-            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'      )\n'
+    place_horizontal_pins_with_gaps(top_pins, height/2 + 5.08, 270)
     
     # Bottom pins (ground, NC/RESERVED)
-    if bottom_pins:
-        start_x = -(len(bottom_pins) - 1) * pin_spacing / 2
-        for i, pin in enumerate(bottom_pins):
-            x = start_x + (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {-height/2 - 5.08:.2f} 90) (length 5.08)\n'
-            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-            symbol += f'      )\n'
+    place_horizontal_pins_with_gaps(bottom_pins, -height/2 - 5.08, 90)
     
     symbol += '    )\n'
     symbol += '  )\n'
