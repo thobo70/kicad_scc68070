@@ -18,6 +18,7 @@ class Pin:
     type: str  # I, O, I/O, PWR, NC
     polarity: str  # H, L, -
     drive: str  # PP, OD, 3S, -
+    group: str  # ADDRESS, DATA, POWER, GROUND, BUS_CTRL, DMA, INTERRUPT, etc.
     description: str
     
     def to_kicad_type(self) -> str:
@@ -61,10 +62,10 @@ def parse_pin_table(filepath: Path) -> List[Pin]:
             if line.startswith('#') or line.startswith('PIN') or '---' in line:
                 continue
             
-            # Parse pin table line
-            match = re.match(r'\s*(\d+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(.+)', line)
+            # Parse pin table line - now with GROUP column
+            match = re.match(r'\s*(\d+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*(.+)', line)
             if match:
-                pin_num, signal, pin_type, polarity, drive, description = match.groups()
+                pin_num, signal, pin_type, polarity, drive, group, description = match.groups()
                 
                 pins.append(Pin(
                     number=pin_num.strip(),
@@ -72,6 +73,7 @@ def parse_pin_table(filepath: Path) -> List[Pin]:
                     type=pin_type.strip(),
                     polarity=polarity.strip(),
                     drive=drive.strip(),
+                    group=group.strip(),
                     description=description.strip()
                 ))
     
@@ -81,52 +83,81 @@ def parse_pin_table(filepath: Path) -> List[Pin]:
 def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter: str = "*") -> str:
     """Generate KiCad 6.x symbol file content"""
     
-    # Calculate symbol dimensions based on number of pins
-    # Place pins on all 4 sides for large pin counts
-    left_pins = []
-    right_pins = []
-    top_pins = []
-    bottom_pins = []
+def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter: str = "*") -> str:
+    """Generate KiCad 6.x symbol file content"""
     
-    # Group pins by function for logical placement
+    # Group pins using the GROUP field from pin tables (data-driven, not hardcoded!)
+    pin_groups = {}
     for pin in pins:
-        if pin.type == 'NC' or pin.name == 'RESERVED':
-            # NC pins go to bottom
-            bottom_pins.append(pin)
-        elif pin.type == 'PWR':
-            # Power pins go to top/bottom
-            if 'VDD' in pin.name or 'VCC' in pin.name:
-                top_pins.append(pin)
-            else:  # VSS, GND
-                bottom_pins.append(pin)
-        elif pin.name.startswith('A'):  # Address bus
-            left_pins.append(pin)
-        elif pin.name.startswith('D'):  # Data bus
-            right_pins.append(pin)
-        else:  # Control signals
-            # Distribute between left and right
-            if len(left_pins) <= len(right_pins):
-                left_pins.append(pin)
-            else:
-                right_pins.append(pin)
+        group = pin.group
+        if group not in pin_groups:
+            pin_groups[group] = []
+        pin_groups[group].append(pin)
+    
+    # Extract groups (using .get() so missing groups don't cause errors)
+    address_pins = pin_groups.get('ADDRESS', [])
+    data_pins = pin_groups.get('DATA', [])
+    power_pins = pin_groups.get('POWER', [])
+    ground_pins = pin_groups.get('GROUND', [])
+    bus_control = pin_groups.get('BUS_CTRL', [])
+    interrupts = pin_groups.get('INTERRUPT', [])
+    dma_pins = pin_groups.get('DMA', [])
+    i2c_pins = pin_groups.get('I2C', [])
+    uart_pins = pin_groups.get('UART', [])
+    clock_pins = pin_groups.get('CLOCK', [])
+    system_pins = pin_groups.get('SYSTEM', [])
+    timer_pins = pin_groups.get('TIMER', [])
+    
+    # Video chip specific groups
+    mem_data_pins = pin_groups.get('MEM_DATA', [])  # Memory data bus MD0-MD15
+    mem_addr_pins = pin_groups.get('MEM_ADDR', [])  # Memory address MA0-MA9
+    mem_ctrl_pins = pin_groups.get('MEM_CTRL', [])  # RAS, CAS, WE, OE
+    video_pins = pin_groups.get('VIDEO', [])        # V0-V7 video output
+    video_sync_pins = pin_groups.get('VIDEO_SYNC', [])  # VSYNC, HSYNC, etc.
+    chip_sel_pins = pin_groups.get('CHIP_SEL', [])  # CS, WRP
+    
+    control_pins = pin_groups.get('CONTROL', [])
+    
+    # Sort buses by number
+    def extract_bus_number(pin):
+        match = re.search(r'\d+', pin.name)
+        return int(match.group()) if match else 999
+    
+    address_pins.sort(key=extract_bus_number)
+    data_pins.sort(key=extract_bus_number)
+    power_pins.sort(key=lambda p: int(p.number))
+    ground_pins.sort(key=lambda p: int(p.number))
+    
+    # Assign pins to sides with logical grouping (from GROUP field)
+    # Left: Address bus, memory address, bus control, interrupts
+    # Right: Data bus, memory data bus, DMA, I2C, UART, timers, chip selects
+    # Top: Power, clock, video sync
+    # Bottom: Ground, system control, memory control
+    left_pins = address_pins + mem_addr_pins + bus_control + interrupts
+    right_pins = data_pins + mem_data_pins + dma_pins + i2c_pins + uart_pins + timer_pins + chip_sel_pins + control_pins
+    top_pins = power_pins + clock_pins + video_sync_pins
+    bottom_pins = ground_pins + system_pins + mem_ctrl_pins + video_pins
     
     # Calculate symbol box size
-    # KiCad uses 0.001 inch (mil) units internally
-    pin_spacing = 2.54  # 2.54mm = 100 mils
-    max_height = max(len(left_pins), len(right_pins)) * pin_spacing
-    max_width = max(len(top_pins), len(bottom_pins)) * pin_spacing
+    pin_spacing = 2.54  # 2.54mm spacing between pins
+    left_height = len(left_pins) * pin_spacing
+    right_height = len(right_pins) * pin_spacing
+    top_width = len(top_pins) * pin_spacing if top_pins else 10.16
+    bottom_width = len(bottom_pins) * pin_spacing if bottom_pins else 10.16
     
-    # Minimum symbol size in mm
-    width = max(50.8, max_width)  # 50.8mm = 2000 mils
-    height = max(50.8, max_height)
+    # Symbol dimensions
+    height = max(left_height, right_height) + 10.16  # Add padding
+    width = max(top_width, bottom_width, 50.8)  # Minimum 50.8mm width
     
     # Start building symbol
+    # Pin names will be shown outside the box with proper offset
+    # Reference at top (above the box), Value at bottom (below the box)
     symbol = f'''(kicad_symbol_lib (version 20211014) (generator kicad_symbol_generator)
   (symbol "{component_name}" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
-    (property "Reference" "U" (id 0) (at 0 {height/2 + 5.08:.2f} 0)
+    (property "Reference" "U" (id 0) (at 0 {height/2 + 2.54:.2f} 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "{component_name}" (id 1) (at 0 {height/2 + 10.16:.2f} 0)
+    (property "Value" "{component_name}" (id 1) (at 0 {-height/2 - 2.54:.2f} 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -155,43 +186,45 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
     # Add pins
     symbol += f'    (symbol "{component_name}_1_1"\n'
     
-    # Left side pins (address bus, some control)
-    y_pos = height/2 - 5.08
-    for i, pin in enumerate(left_pins):
-        if i < len(left_pins):  # Ensure we don't overflow
-            y = y_pos - (i * pin_spacing)
+    # Left side pins (address bus first, then control)
+    if left_pins:
+        start_y = (len(left_pins) - 1) * pin_spacing / 2
+        for i, pin in enumerate(left_pins):
+            y = start_y - (i * pin_spacing)
             symbol += f'      (pin {pin.to_kicad_type()} line (at {-width/2 - 5.08:.2f} {y:.2f} 0) (length 5.08)\n'
             symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'      )\n'
     
-    # Right side pins (data bus, some control)
-    y_pos = height/2 - 5.08
-    for i, pin in enumerate(right_pins):
-        if i < len(right_pins):
-            y = y_pos - (i * pin_spacing)
+    # Right side pins (data bus first, then control)
+    if right_pins:
+        start_y = (len(right_pins) - 1) * pin_spacing / 2
+        for i, pin in enumerate(right_pins):
+            y = start_y - (i * pin_spacing)
             symbol += f'      (pin {pin.to_kicad_type()} line (at {width/2 + 5.08:.2f} {y:.2f} 180) (length 5.08)\n'
             symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'      )\n'
     
-    # Top pins (power)
-    x_pos = -(len(top_pins) * pin_spacing) / 2
-    for i, pin in enumerate(top_pins):
-        x = x_pos + (i * pin_spacing)
-        symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {height/2 + 5.08:.2f} 270) (length 5.08)\n'
-        symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-        symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-        symbol += f'      )\n'
+    # Top pins (power supplies)
+    if top_pins:
+        start_x = -(len(top_pins) - 1) * pin_spacing / 2
+        for i, pin in enumerate(top_pins):
+            x = start_x + (i * pin_spacing)
+            symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {height/2 + 5.08:.2f} 270) (length 5.08)\n'
+            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
+            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
+            symbol += f'      )\n'
     
-    # Bottom pins (ground, NC)
-    x_pos = -(len(bottom_pins) * pin_spacing) / 2
-    for i, pin in enumerate(bottom_pins[:20]):  # Limit bottom pins to avoid overcrowding
-        x = x_pos + (i * pin_spacing)
-        symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {-height/2 - 5.08:.2f} 90) (length 5.08)\n'
-        symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
-        symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
-        symbol += f'      )\n'
+    # Bottom pins (ground, NC/RESERVED)
+    if bottom_pins:
+        start_x = -(len(bottom_pins) - 1) * pin_spacing / 2
+        for i, pin in enumerate(bottom_pins):
+            x = start_x + (i * pin_spacing)
+            symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {-height/2 - 5.08:.2f} 90) (length 5.08)\n'
+            symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
+            symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
+            symbol += f'      )\n'
     
     symbol += '    )\n'
     symbol += '  )\n'
