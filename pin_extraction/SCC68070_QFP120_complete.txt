@@ -1,0 +1,170 @@
+# SCC68070 QFP-120 Complete Pin Table
+# Philips/NXP CD-i Microprocessor
+# Package: QFP-120
+#
+# Column definitions:
+#   PIN      - Physical pin number on the package
+#   SIGNAL   - Signal name
+#   TYPE     - I=Input, O=Output, I/O=Bidirectional, PWR=Power/Ground, NC=No Connect
+#   POL      - H=Active HIGH, L=Active LOW, -=Not applicable
+#   DRIVE    - PP=Push-Pull, 3S=3-State, OD=Open-Drain, -=Not applicable
+#   FUNCTION - Signal description
+
+PIN  | SIGNAL      | TYPE | POL | DRIVE | FUNCTION
+-----|-------------|------|-----|-------|--------------------------------------------------
+ 1   | NC          | NC   | -   | -     | No connect - do not use
+ 2   | NC          | NC   | -   | -     | No connect - do not use
+ 3   | NC          | NC   | -   | -     | No connect - do not use
+ 4   | NC          | NC   | -   | -     | No connect - do not use
+ 5   | NC          | NC   | -   | -     | No connect - do not use
+ 6   | ACK1        | O    | L   | PP    | DMA Request Acknowledge 1 (active LOW)
+ 7   | REQ2        | I    | L   | -     | DMA Request 2 (active LOW)
+ 8   | ACK2        | O    | L   | PP    | DMA Request Acknowledge 2 (active LOW)
+ 9   | DONE        | I/O  | L   | OD    | DMA Done (active LOW, open drain)
+ 10  | DTC         | O    | L   | OD    | Device Transfer Complete (active LOW, open drain)
+ 11  | RDY         | I    | L   | -     | Device Ready (active LOW)
+ 12  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 13  | AS          | O    | L   | 3S    | Address Strobe (active LOW, 3-state)
+ 14  | UDS         | O    | L   | 3S    | Upper Data Strobe (active LOW, 3-state)
+ 15  | LDS         | O    | L   | 3S    | Lower Data Strobe (active LOW, 3-state)
+ 16  | VSS         | PWR  | -   | -     | Ground
+ 17  | VSS         | PWR  | -   | -     | Ground
+ 18  | R/W         | O    | L   | 3S    | Read/Write (HIGH=Read, LOW=Write, 3-state)
+ 19  | DTACK       | I    | L   | -     | Data Transfer Acknowledge (active LOW)
+ 20  | AV          | I    | L   | -     | Autovector (active LOW)
+ 21  | BERR        | I/O  | L   | OD    | Bus Error (active LOW, open drain)
+ 22  | HALT        | I/O  | L   | OD    | Halt (active LOW, open drain, bidirectional)
+ 23  | RESET       | I/O  | L   | OD    | Reset (active LOW, open drain, bidirectional)
+ 24  | CKOUT       | O    | H   | PP    | Clock Output (system clock reference)
+ 25  | XTAL1       | I    | H   | -     | Crystal Oscillator Input (or external clock)
+ 26  | XTAL2       | I    | H   | -     | Crystal Oscillator Input
+ 27  | NC          | NC   | -   | -     | No connect - do not use
+ 28  | NC          | NC   | -   | -     | No connect - do not use
+ 29  | NC          | NC   | -   | -     | No connect - do not use
+ 30  | NC          | NC   | -   | -     | No connect - do not use
+ 31  | NC          | NC   | -   | -     | No connect - do not use
+ 32  | A1          | O    | H   | 3S    | Address bus bit 1 (3-state)
+ 33  | A2          | O    | H   | 3S    | Address bus bit 2 (3-state)
+ 34  | A3          | O    | H   | 3S    | Address bus bit 3 (3-state)
+ 35  | A4          | O    | H   | 3S    | Address bus bit 4 (3-state)
+ 36  | A5          | O    | H   | 3S    | Address bus bit 5 (3-state)
+ 37  | A6          | O    | H   | 3S    | Address bus bit 6 (3-state)
+ 38  | A7          | O    | H   | 3S    | Address bus bit 7 (3-state)
+ 39  | A8          | O    | H   | 3S    | Address bus bit 8 (3-state)
+ 40  | A9          | O    | H   | 3S    | Address bus bit 9 (3-state)
+ 41  | A10         | O    | H   | 3S    | Address bus bit 10 (3-state)
+ 42  | A11         | O    | H   | 3S    | Address bus bit 11 (3-state)
+ 43  | NC          | NC   | -   | -     | No connect - do not use
+ 44  | NC          | NC   | -   | -     | No connect - do not use
+ 45  | VDD         | PWR  | -   | -     | Power supply (+5V nominal)
+ 46  | VDD         | PWR  | -   | -     | Power supply (+5V nominal)
+ 47  | A12         | O    | H   | 3S    | Address bus bit 12 (3-state)
+ 48  | A13         | O    | H   | 3S    | Address bus bit 13 (3-state)
+ 49  | A14         | O    | H   | 3S    | Address bus bit 14 (3-state)
+ 50  | A15         | O    | H   | 3S    | Address bus bit 15 (3-state)
+ 51  | A16         | O    | H   | 3S    | Address bus bit 16 (3-state)
+ 52  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 53  | A17         | O    | H   | 3S    | Address bus bit 17 (3-state)
+ 54  | A18         | O    | H   | 3S    | Address bus bit 18 (3-state)
+ 55  | A19         | O    | H   | 3S    | Address bus bit 19 (3-state)
+ 56  | A20         | O    | H   | 3S    | Address bus bit 20 (3-state)
+ 57  | A21         | O    | H   | 3S    | Address bus bit 21 (3-state)
+ 58  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 59  | A22         | O    | H   | 3S    | Address bus bit 22 (3-state)
+ 60  | NC          | NC   | -   | -     | No connect - do not use
+ 61  | NC          | NC   | -   | -     | No connect - do not use
+ 62  | NC          | NC   | -   | -     | No connect - do not use
+ 63  | NC          | NC   | -   | -     | No connect - do not use
+ 64  | NC          | NC   | -   | -     | No connect - do not use
+ 65  | A23         | O    | H   | 3S    | Address bus bit 23 (3-state)
+ 66  | IACK7       | O    | L   | PP    | Interrupt Acknowledge 7 (NMI, active LOW)
+ 67  | NMI         | I    | L   | -     | Non-Maskable Interrupt (level 7, active LOW)
+ 68  | IACK5       | O    | L   | PP    | Interrupt Acknowledge 5 (active LOW)
+ 69  | IN5         | I    | L   | -     | Interrupt Priority Input 5 (active LOW)
+ 70  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 71  | INT2        | I    | L   | -     | Latched Interrupt Input 2 (active LOW)
+ 72  | INT1        | I    | L   | -     | Latched Interrupt Input 1 (active LOW)
+ 73  | IACK4       | O    | L   | PP    | Interrupt Acknowledge 4 (active LOW)
+ 74  | IN4         | I    | L   | -     | Interrupt Priority Input 4 (active LOW)
+ 75  | VSS         | PWR  | -   | -     | Ground
+ 76  | VSS         | PWR  | -   | -     | Ground
+ 77  | IACK2       | O    | L   | PP    | Interrupt Acknowledge 2 (active LOW)
+ 78  | IN2         | I    | L   | -     | Interrupt Priority Input 2 (active LOW)
+ 79  | T2          | I/O  | H   | 3S    | Timer 2 I/O (3-state, capture/output)
+ 80  | T1          | I/O  | H   | 3S    | Timer 1 I/O (3-state, capture/output)
+ 81  | XCKI        | I    | H   | -     | External Clock Input (UART baud rate)
+ 82  | CTS         | I    | L   | -     | Clear To Send (active LOW, UART)
+ 83  | RTS         | O    | L   | PP    | Request To Send (active LOW, UART)
+ 84  | RXD         | I    | H   | -     | Receive Data (UART serial input)
+ 85  | TXD         | O    | H   | PP    | Transmit Data (UART serial output)
+ 86  | NC          | NC   | -   | -     | No connect - do not use
+ 87  | NC          | NC   | -   | -     | No connect - do not use
+ 88  | NC          | NC   | -   | -     | No connect - do not use
+ 89  | NC          | NC   | -   | -     | No connect - do not use
+ 90  | NC          | NC   | -   | -     | No connect - do not use
+ 91  | NC          | NC   | -   | -     | No connect - do not use
+ 92  | SDA         | I/O  | H   | OD    | Serial Data (I2C bus, open drain)
+ 93  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 94  | SCL         | I/O  | H   | OD    | Serial Clock (I2C bus, open drain)
+ 95  | D15         | I/O  | H   | 3S    | Data bus bit 15 (3-state, bidirectional)
+ 96  | D14         | I/O  | H   | 3S    | Data bus bit 14 (3-state, bidirectional)
+ 97  | D13         | I/O  | H   | 3S    | Data bus bit 13 (3-state, bidirectional)
+ 98  | D12         | I/O  | H   | 3S    | Data bus bit 12 (3-state, bidirectional)
+ 99  | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 100 | D11         | I/O  | H   | 3S    | Data bus bit 11 (3-state, bidirectional)
+ 101 | D10         | I/O  | H   | 3S    | Data bus bit 10 (3-state, bidirectional)
+ 102 | D9          | I/O  | H   | 3S    | Data bus bit 9 (3-state, bidirectional)
+ 103 | D8          | I/O  | H   | 3S    | Data bus bit 8 (3-state, bidirectional)
+ 104 | D7          | I/O  | H   | 3S    | Data bus bit 7 (3-state, bidirectional)
+ 105 | VDD         | PWR  | -   | -     | Power supply (+5V nominal)
+ 106 | VDD         | PWR  | -   | -     | Power supply (+5V nominal)
+ 107 | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 108 | RESERVED    | NC   | -   | -     | Reserved - do not connect
+ 109 | D6          | I/O  | H   | 3S    | Data bus bit 6 (3-state, bidirectional)
+ 110 | D5          | I/O  | H   | 3S    | Data bus bit 5 (3-state, bidirectional)
+ 111 | D4          | I/O  | H   | 3S    | Data bus bit 4 (3-state, bidirectional)
+ 112 | D3          | I/O  | H   | 3S    | Data bus bit 3 (3-state, bidirectional)
+ 113 | D2          | I/O  | H   | 3S    | Data bus bit 2 (3-state, bidirectional)
+ 114 | D1          | I/O  | H   | 3S    | Data bus bit 1 (3-state, bidirectional)
+ 115 | D0          | I/O  | H   | 3S    | Data bus bit 0 (3-state, bidirectional)
+ 116 | BG          | O    | L   | PP    | Bus Grant (active LOW, daisy chain)
+ 117 | BGACK       | I/O  | L   | OD    | Bus Grant Acknowledge (active LOW, open drain)
+ 118 | BR          | I    | L   | -     | Bus Request (active LOW, wired-OR)
+ 119 | REQ1        | I    | L   | -     | DMA Request 1 (active LOW)
+ 120 | NC          | NC   | -   | -     | No connect - do not use
+
+# Pin Statistics:
+# ================
+# Total pins:     120
+# Signal pins:    80
+# Power (VDD):    4 pins (45, 46, 105, 106)
+# Ground (VSS):   4 pins (16, 17, 75, 76)
+# Reserved:       8 pins (12, 52, 58, 70, 93, 99, 107, 108)
+# No Connect:     24 pins (1-5, 27-31, 43-44, 60-64, 86-91, 120)
+#
+# Special Notes:
+# ==============
+# - All pins designated 'NC' or 'RESERVED' must not be connected externally (per datasheet)
+# - Open-drain pins requiring external pull-up resistors (4.7kΩ recommended):
+#   * DONE (pin 9)
+#   * DTC (pin 10)
+#   * BERR (pin 21)
+#   * HALT (pin 22)
+#   * RESET (pin 23)
+#   * SDA (pin 92)
+#   * SCL (pin 94)
+#   * BGACK (pin 117)
+# - Address bus: A1-A23 (23 address lines = 16MB address space)
+# - Data bus: D0-D15 (16-bit data bus)
+# - All active-LOW signals (POL=L) will have overline notation in KiCad symbols
+# - 3-State outputs can be disabled during bus arbitration
+#
+# Consistency Checks:
+# ===================
+# ✓ All 120 pins accounted for
+# ✓ No duplicate pin numbers
+# ✓ Address bus complete: A1-A23 (pins 32-65 with gaps for NC/RESERVED)
+# ✓ Data bus complete: D0-D15 (pins 95-115 with gaps for NC/RESERVED)
+# ✓ Power pins: 4 VDD + 4 VSS = 8 total
+# ✓ All open-drain signals identified
+# ✓ All active-LOW signals marked with POL=L

@@ -1,0 +1,160 @@
+# SCC66470 QFP-120 Complete Pin Table
+# Philips/NXP CD-i Video Processor
+# Package: QFP-120 (SOT220B)
+
+PIN | SIGNAL      | TYPE | POL | DRIVE | FUNCTION
+----|-------------|------|-----|-------|--------------------------------------------------
+1   | VSS         | PWR  | -   | -     | Ground
+2   | XTAL2       | O    | H   | PP    | Crystal Oscillator Output
+3   | MA7         | I/O  | H   | 3S    | Memory Address line 7 (3-state)
+4   | MA6         | I/O  | H   | 3S    | Memory Address line 6 (3-state)
+5   | MA5         | I/O  | H   | 3S    | Memory Address line 5 (3-state)
+6   | MA4         | I/O  | H   | 3S    | Memory Address line 4 (3-state)
+7   | MA3         | I/O  | H   | 3S    | Memory Address line 3 (3-state)
+8   | MA2         | I/O  | H   | 3S    | Memory Address line 2 (3-state)
+9   | MA1         | I/O  | H   | 3S    | Memory Address line 1 (3-state)
+10  | MA0         | I/O  | H   | 3S    | Memory Address line 0 (3-state)
+11  | A20         | I    | H   | -     | System address bus bit 20
+12  | A19         | I    | H   | -     | System address bus bit 19
+13  | A18         | I    | H   | -     | System address bus bit 18
+14  | A17         | I    | H   | -     | System address bus bit 17
+15  | VDD         | PWR  | -   | -     | Power supply
+16  | A16         | I    | H   | -     | System address bus bit 16
+17  | VSS         | PWR  | -   | -     | Ground
+18  | A15         | I    | H   | -     | System address bus bit 15
+19  | A14         | I    | H   | -     | System address bus bit 14
+20  | A13         | I    | H   | -     | System address bus bit 13
+21  | A12         | I    | H   | -     | System address bus bit 12
+22  | A11         | I    | H   | -     | System address bus bit 11
+23  | A10         | I    | H   | -     | System address bus bit 10
+24  | A9          | I    | H   | -     | System address bus bit 9
+25  | A8          | I    | H   | -     | System address bus bit 8
+26  | A7          | I    | H   | -     | System address bus bit 7
+27  | A6          | I    | H   | -     | System address bus bit 6
+28  | A5          | I    | H   | -     | System address bus bit 5
+29  | A4          | I    | H   | -     | System address bus bit 4
+30  | A3          | I    | H   | -     | System address bus bit 3
+31  | VSS         | PWR  | -   | -     | Ground
+32  | A2          | I    | H   | -     | System address bus bit 2
+33  | A1          | I    | H   | -     | System address bus bit 1
+34  | RSTOUT      | O    | L   | 3S    | RESET Output (active LOW, 3-state)
+35  | HALT        | O    | L   | 3S    | HALT (active LOW, 3-state)
+36  | BERR        | O    | L   | 3S    | BUS ERROR (active LOW, 3-state)
+37  | DTACK       | O    | L   | OD    | Data Transfer Acknowledge (active LOW, open drain)
+38  | R/W         | I    | L   | -     | Read/Write direction control (LOW=Write)
+39  | LDS         | I    | L   | -     | Lower Data Strobe (active LOW)
+40  | UDS         | I    | L   | -     | Upper Data Strobe (active LOW)
+41  | D0          | I/O  | H   | 3S    | Data bus bit 0 (3-state)
+42  | D1          | I/O  | H   | 3S    | Data bus bit 1 (3-state)
+43  | D2          | I/O  | H   | 3S    | Data bus bit 2 (3-state)
+44  | D3          | I/O  | H   | 3S    | Data bus bit 3 (3-state)
+45  | VSS         | PWR  | -   | -     | Ground
+46  | D4          | I/O  | H   | 3S    | Data bus bit 4 (3-state)
+47  | VDD         | PWR  | -   | -     | Power supply
+48  | D5          | I/O  | H   | 3S    | Data bus bit 5 (3-state)
+49  | D6          | I/O  | H   | 3S    | Data bus bit 6 (3-state)
+50  | D7          | I/O  | H   | 3S    | Data bus bit 7 (3-state)
+51  | CS          | I    | L   | -     | Chip Select (active LOW)
+52  | CSIO        | O    | L   | PP    | Chip Select I/O (active LOW)
+53  | CSROM       | O    | L   | PP    | Chip Select ROM (active LOW)
+54  | INT         | O    | L   | OD    | Interrupt request (active LOW, open drain)
+55  | IPA         | I    | H   | -     | Implicit Pixel accelerator addressing
+56  | CSYNC       | O    | L   | 3S    | Composite Synchronization (active LOW, 3-state)
+57  | DA          | O    | H   | 3S    | Display Active (active HIGH, 3-state)
+58  | RSTIN       | I    | L   | -     | Reset Input (active LOW, Schmitt trigger)
+59  | M/S         | I    | L   | -     | Master/Slave input (LOW=Slave)
+60  | TST         | I    | H   | -     | Test (active HIGH, tie to VSS for normal operation)
+61  | D8          | I/O  | H   | 3S    | Data bus bit 8 (3-state)
+62  | D9          | I/O  | H   | 3S    | Data bus bit 9 (3-state)
+63  | D10         | I/O  | H   | 3S    | Data bus bit 10 (3-state)
+64  | D11         | I/O  | H   | 3S    | Data bus bit 11 (3-state)
+65  | D12         | I/O  | H   | 3S    | Data bus bit 12 (3-state)
+66  | D13         | I/O  | H   | 3S    | Data bus bit 13 (3-state)
+67  | D14         | I/O  | H   | 3S    | Data bus bit 14 (3-state)
+68  | D15         | I/O  | H   | 3S    | Data bus bit 15 (3-state)
+69  | WRP         | O    | L   | 3S    | Write Palette (active LOW, 3-state)
+70  | V7          | O    | H   | 3S    | Video output bit 7 (3-state)
+71  | V6          | O    | H   | 3S    | Video output bit 6 (3-state)
+72  | V5          | O    | H   | 3S    | Video output bit 5 (3-state)
+73  | V4          | O    | H   | 3S    | Video output bit 4 (3-state)
+74  | VSS         | PWR  | -   | -     | Ground
+75  | PCLK        | O    | H   | 3S    | Pixel Clock (3-state)
+76  | VDD         | PWR  | -   | -     | Power supply
+77  | V3          | O    | H   | 3S    | Video output bit 3 (3-state)
+78  | V2          | O    | H   | 3S    | Video output bit 2 (3-state)
+79  | V1          | O    | H   | 3S    | Video output bit 1 (3-state)
+80  | V0          | O    | H   | 3S    | Video output bit 0 (3-state)
+81  | BLANK       | O    | L   | 3S    | Blanking output (active LOW, 3-state)
+82  | VSYNC       | I/O  | L   | 3S    | Vertical Synchronization (active LOW, 3-state)
+83  | HSYNC       | I/O  | L   | 3S    | Horizontal Synchronization (active LOW, 3-state)
+84  | MD0         | I/O  | H   | 3S    | Memory Data bus bit 0 (3-state)
+85  | MD1         | I/O  | H   | 3S    | Memory Data bus bit 1 (3-state)
+86  | MD2         | I/O  | H   | 3S    | Memory Data bus bit 2 (3-state)
+87  | MD3         | I/O  | H   | 3S    | Memory Data bus bit 3 (3-state)
+88  | MD4         | I/O  | H   | 3S    | Memory Data bus bit 4 (3-state)
+89  | MD5         | I/O  | H   | 3S    | Memory Data bus bit 5 (3-state)
+90  | VDD         | PWR  | -   | -     | Power supply
+91  | MD6         | I/O  | H   | 3S    | Memory Data bus bit 6 (3-state)
+92  | MD7         | I/O  | H   | 3S    | Memory Data bus bit 7 (3-state)
+93  | MD8         | I/O  | H   | 3S    | Memory Data bus bit 8 (3-state)
+94  | MD9         | I/O  | H   | 3S    | Memory Data bus bit 9 (3-state)
+95  | VDD         | PWR  | -   | -     | Power supply
+96  | VSS         | PWR  | -   | -     | Ground
+97  | MD10        | I/O  | H   | 3S    | Memory Data bus bit 10 (3-state)
+98  | MD11        | I/O  | H   | 3S    | Memory Data bus bit 11 (3-state)
+99  | MD12        | I/O  | H   | 3S    | Memory Data bus bit 12 (3-state)
+100 | MD13        | I/O  | H   | 3S    | Memory Data bus bit 13 (3-state)
+101 | MD14        | I/O  | H   | 3S    | Memory Data bus bit 14 (3-state)
+102 | MD15        | I/O  | H   | 3S    | Memory Data bus bit 15 (3-state)
+103 | CYREQ       | I    | L   | -     | Cycle Request (active LOW)
+104 | VDD         | PWR  | -   | -     | Power supply
+105 | CSCG        | O    | L   | PP    | Chip Select Character ROM (active LOW)
+106 | VSS         | PWR  | -   | -     | Ground
+107 | CYACK       | O    | L   | PP    | Cycle Acknowledge (active LOW)
+108 | DT          | O    | L   | PP    | Data Transfer (active LOW)
+109 | CAS4        | I/O  | L   | 3S    | Column Address Strobe 4 (active LOW)
+110 | CAS3        | I/O  | L   | 3S    | Column Address Strobe 3 (active LOW)
+111 | CAS2        | I/O  | L   | 3S    | Column Address Strobe 2 (active LOW)
+112 | CAS1        | I/O  | L   | 3S    | Column Address Strobe 1 (active LOW)
+113 | RAS         | I/O  | L   | 3S    | Row Address Strobe (active LOW)
+114 | LWR         | O    | L   | PP    | Lower Write signal (active LOW)
+115 | UWR         | O    | L   | PP    | Upper Write signal (active LOW)
+116 | MA8         | I/O  | H   | 3S    | Memory Address line 8 (3-state)
+117 | XT/4        | O    | H   | PP    | Xtal/4 clock output (fosc/4)
+118 | XT/2        | O    | H   | PP    | Xtal/2 clock output (fosc/2)
+119 | XTAL1       | I    | H   | -     | Crystal Oscillator Input (CMOS compatible)
+120 | VDD         | PWR  | -   | -     | Power supply
+
+# Column Definitions:
+# PIN    = Physical pin number (1-120)
+# SIGNAL = Signal name (without 'N' suffix for active-low signals)
+# TYPE   = I (Input), O (Output), I/O (Bidirectional), PWR (Power/Ground)
+# POL    = Polarity: L (Active LOW), H (Active HIGH), - (Not applicable)
+# DRIVE  = Output drive type:
+#          PP  = Push-Pull (standard output)
+#          OD  = Open-Drain (requires external pull-up resistor)
+#          3S  = 3-State (tri-state capable, high-impedance possible)
+#          -   = Not applicable (inputs, power pins)
+# FUNCTION = Brief description of pin function
+
+# Notes:
+# - All pins are TTL compatible except XTAL1 and XTAL2 (CMOS compatible)
+# - POL column indicates signal polarity for proper KiCad symbol generation
+# - Active LOW signals will have overline (bar) in KiCad schematic symbols
+# - Open drain outputs (DTACK pin 37, INT pin 54) REQUIRE external pull-up resistors
+# - 3-state outputs can enter high-impedance state for bus sharing
+# - Memory address (MA) and data (MD) buses are 3-state for coprocessor access
+# - Video outputs (V0-V7, PCLK, etc.) are 3-state for display disable
+# 
+# Pin Count Summary:
+#   Total pins: 120
+#   - Signal pins: 105
+#   - VDD (power): 8 pins (15, 47, 76, 90, 95, 104, 120)
+#   - VSS (ground): 7 pins (1, 17, 31, 45, 74, 96, 106)
+#
+# Critical Design Notes:
+#   - Pin 37 (DTACK) and Pin 54 (INT) are OPEN-DRAIN: Must add 4.7kΩ pull-up to VDD
+#   - Pin 58 (RSTIN) has internal pull-up, Schmitt trigger input
+#   - Pin 56 (CSYNC) has internal pull-up
+#   - All bidirectional buses (D, MD, MA) must be properly terminated for signal integrity
+
