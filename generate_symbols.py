@@ -111,21 +111,22 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
                 right_pins.append(pin)
     
     # Calculate symbol box size
-    pin_spacing = 100  # 100 mils = 2.54mm
+    # KiCad uses 0.001 inch (mil) units internally
+    pin_spacing = 2.54  # 2.54mm = 100 mils
     max_height = max(len(left_pins), len(right_pins)) * pin_spacing
     max_width = max(len(top_pins), len(bottom_pins)) * pin_spacing
     
-    # Minimum symbol size
-    width = max(2000, max_width)
-    height = max(2000, max_height)
+    # Minimum symbol size in mm
+    width = max(50.8, max_width)  # 50.8mm = 2000 mils
+    height = max(50.8, max_height)
     
     # Start building symbol
     symbol = f'''(kicad_symbol_lib (version 20211014) (generator kicad_symbol_generator)
   (symbol "{component_name}" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
-    (property "Reference" "U" (id 0) (at 0 {height//2 + 200} 0)
+    (property "Reference" "U" (id 0) (at 0 {height/2 + 5.08:.2f} 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "{component_name}" (id 1) (at 0 {height//2 + 400} 0)
+    (property "Value" "{component_name}" (id 1) (at 0 {height/2 + 10.16:.2f} 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -144,7 +145,7 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
       (effects (font (size 1.27 1.27)) hide)
     )
     (symbol "{component_name}_0_1"
-      (rectangle (start -{width//2} {height//2}) (end {width//2} -{height//2})
+      (rectangle (start {-width/2:.2f} {height/2:.2f}) (end {width/2:.2f} {-height/2:.2f})
         (stroke (width 0.254) (type default) (color 0 0 0 0))
         (fill (type background))
       )
@@ -155,39 +156,39 @@ def generate_kicad_symbol(component_name: str, pins: List[Pin], footprint_filter
     symbol += f'    (symbol "{component_name}_1_1"\n'
     
     # Left side pins (address bus, some control)
-    y_pos = height//2 - 200
+    y_pos = height/2 - 5.08
     for i, pin in enumerate(left_pins):
         if i < len(left_pins):  # Ensure we don't overflow
             y = y_pos - (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at -{width//2 - 200} {y} 0) (length 200)\n'
+            symbol += f'      (pin {pin.to_kicad_type()} line (at {-width/2 - 5.08:.2f} {y:.2f} 0) (length 5.08)\n'
             symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'      )\n'
     
     # Right side pins (data bus, some control)
-    y_pos = height//2 - 200
+    y_pos = height/2 - 5.08
     for i, pin in enumerate(right_pins):
         if i < len(right_pins):
             y = y_pos - (i * pin_spacing)
-            symbol += f'      (pin {pin.to_kicad_type()} line (at {width//2 + 200} {y} 180) (length 200)\n'
+            symbol += f'      (pin {pin.to_kicad_type()} line (at {width/2 + 5.08:.2f} {y:.2f} 180) (length 5.08)\n'
             symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
             symbol += f'      )\n'
     
     # Top pins (power)
-    x_pos = -(len(top_pins) * pin_spacing) // 2
+    x_pos = -(len(top_pins) * pin_spacing) / 2
     for i, pin in enumerate(top_pins):
         x = x_pos + (i * pin_spacing)
-        symbol += f'      (pin {pin.to_kicad_type()} line (at {x} {height//2 + 200} 270) (length 200)\n'
+        symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {height/2 + 5.08:.2f} 270) (length 5.08)\n'
         symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
         symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
         symbol += f'      )\n'
     
     # Bottom pins (ground, NC)
-    x_pos = -(len(bottom_pins) * pin_spacing) // 2
+    x_pos = -(len(bottom_pins) * pin_spacing) / 2
     for i, pin in enumerate(bottom_pins[:20]):  # Limit bottom pins to avoid overcrowding
         x = x_pos + (i * pin_spacing)
-        symbol += f'      (pin {pin.to_kicad_type()} line (at {x} -{height//2 + 200} 90) (length 200)\n'
+        symbol += f'      (pin {pin.to_kicad_type()} line (at {x:.2f} {-height/2 - 5.08:.2f} 90) (length 5.08)\n'
         symbol += f'        (name "{pin.get_display_name()}" (effects (font (size 1.016 1.016))))\n'
         symbol += f'        (number "{pin.number}" (effects (font (size 1.016 1.016))))\n'
         symbol += f'      )\n'
