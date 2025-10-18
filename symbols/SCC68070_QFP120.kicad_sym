@@ -6,7 +6,7 @@
     (property "Value" "SCC68070_QFP120" (id 1) (at 0 -59.69 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Package_QFP:LQFP-120_14x14mm_P0.5mm" (id 2) (at 0 0 0)
+    (property "Footprint" "Custom:QFP-120_28x28_Pitch0.8mm" (id 2) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 0 0 0)
@@ -18,7 +18,7 @@
     (property "ki_description" "SCC68070_QFP120 - Philips CD-i Component" (id 5) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "ki_fp_filters" "*QFP*120*P0.5mm* SOT220*" (id 6) (at 0 0 0)
+    (property "ki_fp_filters" "*QFP*120* SOT349*" (id 6) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (symbol "SCC68070_QFP120_0_1"

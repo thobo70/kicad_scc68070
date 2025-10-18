@@ -8,9 +8,9 @@ def update_symbol_footprint(filepath, footprint_value, fp_filter):
     with open(filepath, 'r') as f:
         content = f.read()
     
-    # Update Footprint property (currently empty)
+    # Update Footprint property (handles both empty and existing values)
     content = re.sub(
-        r'(\(property "Footprint" )"" \(id 2\)',
+        r'(\(property "Footprint" )"[^"]*" \(id 2\)',
         f'\\1"{footprint_value}" (id 2)',
         content
     )
@@ -36,14 +36,14 @@ update_symbol_footprint(
 
 update_symbol_footprint(
     'symbols/SCC68070_QFP120.kicad_sym', 
-    'Package_QFP:LQFP-120_14x14mm_P0.5mm',
-    '*QFP*120*P0.5mm* SOT220*'
+    'Custom:QFP-120_28x28_Pitch0.8mm',
+    '*QFP*120* SOT349*'
 )
 
 update_symbol_footprint(
     'symbols/SCC66470_QFP120.kicad_sym',
-    'Package_QFP:LQFP-120_14x14mm_P0.5mm', 
-    '*QFP*120*P0.5mm* SOT220*'
+    'Custom:QFP-120_28x28_Pitch0.8mm', 
+    '*QFP*120* SOT349*'
 )
 
 print("\nAll footprint references updated!")
